@@ -1,0 +1,233 @@
+@import url(https://fonts.googleapis.com/css?family=Baloo+Bhaina|Black+Ops+One&display=swap);
+@import url(https://fonts.googleapis.com/css?family=Acme&display=swap);
+
+.example-container-1 {
+  width: 20%;
+  display: inline-block;
+  vertical-align: top;
+  height: 100%;
+  background-color: #b2ebf2;
+}
+
+.example-container-2 {
+  width: 80%;
+  display: inline-block;
+  vertical-align: top;
+  height: 100%;
+  background-color: #e0f7fa;
+}
+
+.example-list {
+  min-height: 60px;
+  background: white;
+  border-radius: 4px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  border: solid #000000;
+  background-color: #E0F7FA;
+}
+
+.example-box {
+  padding: 20px 10px;
+  border-bottom: solid 1px #ccc;
+  color: rgba(0, 0, 0, 0.87);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  cursor: move;
+  background: white;
+  font-size: 14px;
+}
+
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: 4px;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+    0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.cdk-drag-placeholder {
+  opacity: 0;
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.example-box:last-child {
+  border: none;
+}
+
+.example-list.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.centrar {
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 2.5rem;
+  width: 360px;
+  height: 40px;
+  padding-left: 1rem;
+  color: #ffffff;
+}
+.cdk-drag.centrar{
+  width: 85%;
+  border-radius: 5px;
+}
+.inputStyle {
+  display: flex;
+  flex-direction: row;
+}
+.inputStyle.cdk-drag.centrar{
+  width: 360px;
+}
+
+.if, .endif {
+  border: solid 2.5px #000000;
+  background: #01579b;
+}
+
+.else , .endelse{
+  border: solid 2.5px #000000;
+  background: #0165b4;
+}
+
+.elseif , .endelseif{
+  border: solid 2.5px #000000;
+  background: #0173ce;
+}
+
+.var {
+  border: solid 2.5px #000000;
+  background: #ff8f00;
+}
+
+.function, .endfunction {
+  border: solid 2.5px #000000;
+  background: #e68100;
+}
+
+.instruccion {
+  border: solid 2.5px #000000;
+  background: #007447;
+}
+
+.while , .endwhile{
+  border: 2.5px #000000;
+  border-style: solid dotted;
+  background: #e53935;
+}
+
+.for, .endfor {
+  border: 2.5px #000000;
+  border-style: solid dotted;
+  background: #d32f2f;
+}
+
+.start {
+  width: 400px;
+  height: 60px;
+  border: double 8px #007447;
+  text-align: center;
+  font-size: 2.5rem;
+  border-radius: 50px;
+  margin-right: auto;
+  margin-left: auto;
+  background: #00ba7c;
+  color: #ffffff;
+}
+
+.end {
+  width: 390px;
+  height: 60px;
+  border: double 8px #007447;
+  text-align: center;
+  font-size: 2.5rem;
+  border-radius: 50px;
+  margin-right: auto;
+  margin-left: auto;
+  background: #00ba7c;
+  color: #ffffff;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: row;
+  
+}
+
+button{
+  margin: 5px;
+  box-shadow:inset 0px 1px 0px 0px #276873;
+	background:linear-gradient(to bottom, #599bb3 5%, #408c99 100%);
+	background-color:#599bb3;
+	border-radius:100px;
+	border:1px solid #29668f;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:15px;
+	font-weight:bold;
+	padding:6px 10px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #3d768a;
+}
+
+button:hover {
+	background:linear-gradient(to bottom, #408c99 5%, #599bb3 100%);
+	background-color:#408c99;
+}
+button:active {
+	position:relative;
+	top:1px;
+}
+
+a:link, a:visited {
+  margin: 5px;
+  box-shadow:inset 0px 1px 0px 0px #276873;
+	background:linear-gradient(to bottom, #599bb3 5%, #408c99 100%);
+	background-color:#599bb3;
+	border-radius:100px;
+	border:1px solid #29668f;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:15px;
+	font-weight:bold;
+	padding:6px 10px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #3d768a;
+  
+}
+
+a:hover{
+  background:linear-gradient(to bottom, #408c99 5%, #599bb3 100%);
+	background-color:#408c99;
+}
+a:active{
+  position:relative;
+	top:1px;
+}
+
+.subTitle{
+  font-size: 20px;
+  color: #000;
+  padding-top: 80px;
+  font-family: Acme;
+  text-align: center;
+}
+.title{
+  font-size: 45px;
+  color: #000;
+  font-family: 'Baloo Bhaina';
+  text-align: center;
+  margin: 0;
+  
+}

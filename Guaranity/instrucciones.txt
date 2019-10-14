@@ -1,0 +1,6 @@
+Instrucciones para Angular
+Todo esto desde consola
+npm install -g @angular/cli
+cd guaranity-ide
+npm i
+ng serve
