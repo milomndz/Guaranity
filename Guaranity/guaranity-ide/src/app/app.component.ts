@@ -173,6 +173,7 @@ export class AppComponent {
   limpiar() {
     this.done = [];
     this.codigoFull = "";
+    this.clearTable();
   }
 
   createTable() {
