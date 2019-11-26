@@ -4,3 +4,6 @@ npm install -g @angular/cli
 cd guaranity-ide
 npm i
 ng serve
+en el server
+npm i
+y lo corres con 'node index'
