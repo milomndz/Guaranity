@@ -15,11 +15,11 @@ function sintactico(tokens, recursive, variables){
           actual=tokens[++i];
           if (actual == "(") {
               actual = tokens[++i];
-              if (actual == "identificador" || actual == "num" || actual== "cadena" || actual == "true" || actual == "false") {
+              if (actual == "identificador" || actual == "num" || actual== "tokcadena" || actual == "true" || actual == "false") {
                 actual = tokens[++i];
                 if (arreglos.comparadores.indexOf(actual) !== -1) {
                   actual = tokens[++i];
-                  if (actual == "identificador" || actual == "num" || actual== "cadena" || actual == "true" || actual == "false") {
+                  if (actual == "identificador" || actual == "num" || actual== "tokcadena" || actual == "true" || actual == "false") {
                     actual = tokens[++i];
                     if (actual == ")") {
                       actual = tokens[++i];

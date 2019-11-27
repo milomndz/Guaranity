@@ -140,7 +140,6 @@ export class AppComponent {
     }
     if (flag) {
       this.callLexicografico();
-      for(var f=0;f<100000;f++){}
       this.ToksTable=[];
       for(var i =0; i< this.tabla.length; i++){
         this.ToksTable.push(this.tabla[i].token)
