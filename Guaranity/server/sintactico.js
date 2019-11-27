@@ -13,7 +13,7 @@ module.exports = function sintactico(code, tokens){
     else{
         errores={
             fallo: error,
-            mensajes= ""
+            mensajes: ""
         }
     }
     return errores;
