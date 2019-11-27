@@ -3,10 +3,10 @@ var Router = express.Router();
 var lexicografico = require("./lexicografico");
 var arreglos= require("./arreglos");
 //var sintactico= require("./sintactico");
-var mensaje="", error=false;
+var mensaje="", error=false, variables=[];
 var i=0;
 
-function condicion(tokens,recursive, variables){
+function condicion(tokens,recursive){
   var actual=tokens[++i];
         if (actual == "(") {
             actual = tokens[++i];
@@ -70,12 +70,12 @@ function condicion(tokens,recursive, variables){
                 }
           }
 }
-function contenido(tokens, recursive, variables){
+function contenido(tokens, recursive){
   var actual=tokens[i];
   if (actual == "{") {
       actual = tokens[++i];
       recursive=true;
-      sintactico(tokens, recursive, variables);
+      sintactico(tokens, recursive);
       actual = tokens[i];
       recursive=false;
         if (actual == "}") {
@@ -103,39 +103,119 @@ function contenido(tokens, recursive, variables){
         }
     }
 }
-function iftok(tokens,recursive, variables){
+function declaracion(tokens, recursive){
+  var actual=tokens[++i];
+  if(actual=="identificador"){
+    actual=tokens[++i];
+    if(actual == "intTok" || actual == "charTok" || actual == "floatTok" || actual == "booleanTok" || actual == "stringTok" || actual == "arrayTok"){
+      actual=tokens[++i];
+      switch(actual){
+        case ";":
+          mensaje+="Declaracion sintacticamente correcta \n";
+          break;
+        case "=":
+          actual=tokens[++i];
+          if(actual == "num" || actual=="tokcadena" || actual=="identificador"){
+            variables.push({nombre: tokens[i-3], tipo: tokens[i-2], valor: actual});
+            actual=tokens[++i];
+            if(actual==";"){
+              mensaje+="Declaracion sintacticamente correcta \n";
+            }else{
+              mensaje+="ERROR SINTACTICO: Se esperaba un ; \n";
+              while(tokens[i]!=";"){
+                if(i<tokens.length)  
+                  i++;
+                else
+                  recursive=false;  
+              }
+            }
+          }else{
+            mensaje+="ERROR SINTACTICO: Se esperaba una cadena, numero u otra variable \n";
+            while(tokens[i]!=";"){
+              if(i<tokens.length)  
+                i++;
+              else
+                recursive=false;  
+            }
+          }
+          break;
+        default:
+          mensaje+="ERROR SINTACTICO: Se esperaba un ; o la asignación de un valor \n";
+          while(tokens[i]!=";"){
+            if(i<tokens.length)  
+              i++;
+            else
+              recursive=false;  
+          }
+      }
+    }else{
+      mensaje+="ERROR SINTACTICO: Se esperaba el tipo de la variable declarada \n";
+      while(tokens[i]!=";"){
+        if(i<tokens.length)  
+          i++;
+        else
+          recursive=false;  
+      }
+    }
+  }else{
+    mensaje+="ERROR SINTACTICO: Se esperaba un identificador para la variable \n"
+    while(tokens[i]!=";"){
+      if(i<tokens.length)  
+        i++;
+      else
+        recursive=false;  
+    }
+  }
+}
+
+function iftok(tokens,recursive){
   mensaje+="Bloque If:\n";
-  condicion(tokens, recursive, variables);
-  contenido(tokens, recursive, variables);
+  condicion(tokens, recursive);
+  contenido(tokens, recursive);
   mensaje+="Fin Bloque If:\n";
   if(i<tokens.length){
       recursive=true;
   }
 }
-function whiletok(tokens, recursive, variables){
+function whiletok(tokens, recursive){
   mensaje+="Bloque While:\n";
-  condicion(tokens,recursive,variables);
-  contenido(tokens, recursive, variables);
+  condicion(tokens,recursive);
+  contenido(tokens, recursive);
   mensaje+="Fin Bloque While \n";
   if(i<tokens.length){
     recursive=true;
+  }
 }
+function vartok(tokens, recursive){
+  mensaje+="Declaración de variable \n";
+  declaracion(tokens, recursive);
+  ++i;
+  if(i<tokens.length){
+    recursive=true;
+  }
+  sintactico(tokens, recursive);
 }
-function sintactico(tokens, recursive, variables){
+function sintactico(tokens, recursive){
   var actual=tokens[i];
   switch(actual){
       case "}":
           recursive=false;
           break;
       case "ifTok":
-          iftok(tokens, recursive, variables);
+          iftok(tokens, recursive);
           break;
       case "whileTok":
-          whiletok(tokens, recursive, variables);    
+          whiletok(tokens, recursive);    
           break;
+      case "varTok":
+          vartok(tokens, recursive);
+          break;
+      default:
+        mensaje+="Operacion no definida\n";
   }
   if (recursive && i < tokens.length) {
-    sintactico(tokens, recursive, variables);
+    
+    sintactico(tokens, recursive);
   }
 }
 
@@ -153,8 +233,8 @@ Router.post("/all", function(req, res) {
 Router.post("/sintactico", function(req,res){
 var tokens=req.body.tokens;
 //error=false;mensaje="F";
-mensaje="", i=0, error=false;
-sintactico(tokens,false, []);
+mensaje="", i=0, error=false, variables=[];
+sintactico(tokens,false);
 res.send(mensaje);
 
 });
