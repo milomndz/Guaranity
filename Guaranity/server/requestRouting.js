@@ -195,6 +195,16 @@ function vartok(tokens, recursive){
   }
   sintactico(tokens, recursive);
 }
+
+function elsetok(tokens, recursive){
+  mensaje+="Bloque Else: \n";
+  ++i;
+  contenido(tokens, recursive);
+  mensaje+="Fin Bloque Else \n";
+  if(i<tokens.length){
+    recursive=true;
+  }
+}
 function sintactico(tokens, recursive){
   var actual=tokens[i];
   switch(actual){
@@ -210,8 +220,11 @@ function sintactico(tokens, recursive){
       case "varTok":
           vartok(tokens, recursive);
           break;
-      default:
-        mensaje+="Operacion no definida\n";
+      case "elseTok":
+          elsetok(tokens, recursive);
+          break;
+      //default:
+        //mensaje+=actual+"Operacion no definida\n";
   }
   if (recursive && i < tokens.length) {
     
