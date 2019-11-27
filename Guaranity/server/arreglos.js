@@ -107,5 +107,13 @@ module.exports = {
     "readTok",
     "printTok",
     "returnTok"
+  ],
+  comparadores : [
+    "<",
+    ">", 
+    ">='", 
+    ">=", 
+    "==", 
+    "!="
   ]
 };
