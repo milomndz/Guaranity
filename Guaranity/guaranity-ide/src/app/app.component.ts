@@ -140,14 +140,7 @@ export class AppComponent {
     }
     if (flag) {
       this.callLexicografico();
-      this.ToksTable=[];
-      for(var i =0; i< this.tabla.length; i++){
-        this.ToksTable.push(this.tabla[i].token)
-      }
-      console.log(this.tabla);
-      console.log(this.ToksTable);
-      
-      this.callSintactico();
+     
     }else {
       this.saveFile();
     }
@@ -172,6 +165,11 @@ export class AppComponent {
       .then(res => {
         this.tabla = res.data;
         this.createTable();
+        this.ToksTable=[];
+      for(var i =0; i< this.tabla.length; i++){
+        this.ToksTable.push(this.tabla[i].token)
+      }
+      this.callSintactico();
       })
       .catch(error => {
         console.error(error);
@@ -183,7 +181,7 @@ export class AppComponent {
         tokens: this.ToksTable
       })
       .then(res => {
-        console.log(res.data);
+        alert(res.data);
         //this.createTable();
       })
       .catch(error => {
