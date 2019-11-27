@@ -29,22 +29,22 @@
 <div class="example-container-2" ng-app="myApp" ng-controller="myCtrl">
   <h2 class="title">GUARANITY IDE</h2>
   <div class="buttons">
-    <button (click)="prueba(true)">
+    <button (click)="prueba(true)" title="Play">
       <i class="material-icons" style="transform: rotate(90deg);">eject</i>
     </button>
-    <button (click)="prueba(false)">
+    <button (click)="prueba(false)" title="Download">
       <i class="material-icons">file_download</i>
     </button>
-    <button (click)="limpiar()">
+    <button (click)="limpiar()" title="Clean">
       <i class="material-icons">delete_sweep</i>
     </button>
-    <button>
+    <button title="Upload">
       <i class="material-icons">open_in_browser </i>
     </button>
     <a
       target="_blank"
       href="https://drive.google.com/file/d/1uOKrv2nw77F3Y5ACQ2_vLn2RQcCRVCtP/view?usp=sharing"
-      ><i class="material-icons">live_help</i></a
+      title="Help"><i class="material-icons">live_help</i></a
     >
   </div>
   <div
