@@ -5,8 +5,47 @@ module.exports = function lexicografico(cadena) {
   var ToksTable = [];
   let aux = "";
   var token = "";
-  var flag = false;
+  var flag = false; 
+  let comillas=0;
+  let comenta=0;
+
   for (let i = 0; i < codigo.length; i++) {
+    if(codigo[i]==="\""){
+      comillas+=1;
+    }
+    else if(codigo[i]==="#"){
+      comenta+=1;
+    }
+  }
+  for (let i = 0; i < codigo.length; i++) {
+    if(arreglos.comentario.indexOf(codigo[i]) != -1 && comenta%2===0){
+      aux += codigo[i];
+      ++i;
+      while(codigo[i]!="#"){
+        aux += codigo[i];
+        ++i;
+      }
+      aux += codigo[i];
+      tabla.push({
+        lexema: aux,
+        token: "tokcomentario"  
+      });
+      ToksTable.push(token);
+    }
+    if(arreglos.cadenas.indexOf(codigo[i]) != -1 && comillas%2===0){
+      aux += codigo[i];
+      ++i;
+      while(codigo[i]!="\""){
+        aux += codigo[i];
+        ++i;
+      }
+      aux += codigo[i];
+      tabla.push({
+        lexema: aux,
+        token: "tokcadena"  
+      });
+      ToksTable.push(token);
+    }
     if (arreglos.alfabeto.indexOf(codigo[i]) != -1) {
       aux += codigo[i];
       flag = true;
@@ -97,12 +136,20 @@ module.exports = function lexicografico(cadena) {
               token: "num"
             });
             ToksTable.push("num");
-          } else {
+          
+          }
+          else if(aux.includes("\"")){
+
+          } 
+          else if(aux.includes("#")){
+
+          } 
+          else {
             tabla.push({
               lexema: aux,
               token: "identificador"
             });
-            ToksTable.push("identificador");
+            ToksTable.push(token);
             flag = false;
           }
         }

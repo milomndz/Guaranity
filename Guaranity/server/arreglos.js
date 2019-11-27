@@ -23,6 +23,13 @@ module.exports = {
     "print",
     "return"
   ],
+
+  cadenas:[
+    "\""
+  ],
+  comentario:[
+    "#"
+  ],
   alfabeto: [
     "a",
     "b",
@@ -72,11 +79,10 @@ module.exports = {
     "++",
     "--",
     "=",
-    "#",
     "[",
     "]",
     "(",
-    ")"
+    ")",
   ],
   tokens: [
     "ifTok",

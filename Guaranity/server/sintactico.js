@@ -16,5 +16,6 @@ module.exports = function sintactico(code, tokens){
             mensajes: ""
         }
     }
+ 
     return errores;
 }
