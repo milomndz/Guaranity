@@ -4,7 +4,123 @@ var lexicografico = require("./lexicografico");
 var arreglos= require("./arreglos");
 //var sintactico= require("./sintactico");
 var mensaje="", error=false;
-var i=0
+var i=0;
+
+function condicion(tokens,recursive, variables){
+  var actual=tokens[++i];
+        if (actual == "(") {
+            actual = tokens[++i];
+            if (actual == "identificador" || actual == "num" || actual== "tokcadena" || actual == "true" || actual == "false") {
+              actual = tokens[++i];
+              if (arreglos.comparadores.indexOf(actual) !== -1) {
+                actual = tokens[++i];
+                if (actual == "identificador" || actual == "num" || actual== "tokcadena" || actual == "true" || actual == "false") {
+                  actual = tokens[++i];
+                  if (actual == ")") {
+                    i++;
+                    mensaje+="Condición Correcta sintacticamente \n";
+                  }else {
+                    error=true;
+                    mensaje+='ERROR SINTACTICO en condición: Se  esperaba un ")" \n';
+                    while(tokens[i]!="{"){
+                      if(i<tokens.length)  
+                        i++;
+                      else
+                        recursive=false;
+                    }
+                  }
+                }else {
+                    error=true;
+                    mensaje+="ERROR SINTACTICO en condición: Se  esperaba un identificador, número, cadena o booleano \n";
+                    while(tokens[i]!="{"){
+                      if(i<tokens.length)  
+                        i++;
+                      else
+                        recursive=false;
+                    }
+                }
+              }else {
+                    error=true;
+                    mensaje+="ERROR SINTACTICO en condición: Se  esperaba un comparador \n";
+                    while(tokens[i]!="{"){
+                      if(i<tokens.length)  
+                        i++;
+                      else
+                        recursive=false;
+                    }
+              }
+            }else {
+                error=true;
+                mensaje+="ERROR SINTACTICO en condición: Se  esperaba un identificador, número, cadena o booleano \n";
+                while(tokens[i]!="{"){
+                  if(i<tokens.length)  
+                    i++;
+                  else
+                    recursive=false;
+                }
+            }
+          }else {
+                error=true;
+                mensaje+='ERROR SINTACTICO en condición: Se  esperaba un "(" \n';
+                while(tokens[i]!="{"){
+                  if(i<tokens.length)  
+                    i++;
+                  else
+                    recursive=false;
+                }
+          }
+}
+function contenido(tokens, recursive, variables){
+  var actual=tokens[i];
+  if (actual == "{") {
+      actual = tokens[++i];
+      recursive=true;
+      sintactico(tokens, recursive, variables);
+      actual = tokens[i];
+      recursive=false;
+        if (actual == "}") {
+            this.actual = tokens[++i];
+            mensaje+="Contenido Correcto \n";
+            
+        }else {
+            error=true;
+            mensaje+='ERROR SINTACTICO en contenido: Se  esperaba una "}" \n';
+            while(tokens[i]!=";" && tokens[i]!="}" && tokens[i]!="{"){
+              if(i<tokens.length)  
+                i++;
+              else
+                recursive=false;
+            }
+        }
+    }else {
+        error=true;
+        mensaje+='ERROR SINTACTICO en contenido: Se  esperaba una "{" \n';
+        while(tokens[i]!=";" && tokens[i]!="}" && tokens[i]!="{"){
+          if(i<tokens.length)  
+            i++;
+          else
+            recursive=false;
+        }
+    }
+}
+function iftok(tokens,recursive, variables){
+  mensaje+="Bloque If:\n";
+  condicion(tokens, recursive, variables);
+  contenido(tokens, recursive, variables);
+  mensaje+="Fin Bloque If:\n";
+  if(i<tokens.length){
+      recursive=true;
+  }
+}
+function whiletok(tokens, recursive, variables){
+  mensaje+="Bloque While:\n";
+  condicion(tokens,recursive,variables);
+  contenido(tokens, recursive, variables);
+  mensaje+="Fin Bloque While \n";
+  if(i<tokens.length){
+    recursive=true;
+}
+}
 function sintactico(tokens, recursive, variables){
   var actual=tokens[i];
   switch(actual){
@@ -12,57 +128,11 @@ function sintactico(tokens, recursive, variables){
           recursive=false;
           break;
       case "ifTok":
-          actual=tokens[++i];
-          if (actual == "(") {
-              actual = tokens[++i];
-              if (actual == "identificador" || actual == "num" || actual== "tokcadena" || actual == "true" || actual == "false") {
-                actual = tokens[++i];
-                if (arreglos.comparadores.indexOf(actual) !== -1) {
-                  actual = tokens[++i];
-                  if (actual == "identificador" || actual == "num" || actual== "tokcadena" || actual == "true" || actual == "false") {
-                    actual = tokens[++i];
-                    if (actual == ")") {
-                      actual = tokens[++i];
-                      mensaje+="Condición del if Correcta \n";
-                      if (actual == "{") {
-                        actual = tokens[++i];
-                        recursive=true;
-                        sintactico(tokens, recursive, variables);
-                        actual = tokens[i];
-                        recursive=false;
-                          if (actual == "}") {
-                              this.actual = tokens[++i];
-                              mensaje+="If Correcto \n";
-                              
-                          }else {
-                              error=true;
-                              mensaje+='ERROR SINTACTICO: Se  esperaba una "}" \n';
-                          }
-                      }else {
-                          error=true;
-                          mensaje+='ERROR SINTACTICO: Se  esperaba una "{" \n';
-                      }
-                    }else {
-                      error=true;
-                      mensaje+='ERROR SINTACTICO: Se  esperaba un ")" \n';
-                    }
-                  }else {
-                      error=true;
-                      mensaje+="ERROR SINTACTICO: Se  esperaba un identificador, número, cadena o booleano \n";
-                  }
-                }else {
-                      error=true;
-                      mensaje+="ERROR SINTACTICO: Se  esperaba un comparador \n";
-                }
-              }else {
-                  error=true;
-                  mensaje+="ERROR SINTACTICO: Se  esperaba un identificador, número, cadena o booleano \n";
-              }
-            }else {
-                  error=true;
-                  mensaje+='ERROR SINTACTICO: Se  esperaba un "(" \n';
-            }
-            break;
+          iftok(tokens, recursive, variables);
+          break;
+      case "whileTok":
+          whiletok(tokens, recursive, variables);    
+          break;
   }
   if (recursive && i < tokens.length) {
     sintactico(tokens, recursive, variables);
