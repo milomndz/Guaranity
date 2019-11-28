@@ -122,6 +122,7 @@ function declaracion(tokens, recursive){
               mensaje+="Declaracion sintacticamente correcta \n";
             }else{
               mensaje+="ERROR SINTACTICO: Se esperaba un ; \n";
+              error=true;
               while(tokens[i]!=";"){
                 if(i<tokens.length)  
                   i++;
@@ -131,6 +132,7 @@ function declaracion(tokens, recursive){
             }
           }else{
             mensaje+="ERROR SINTACTICO: Se esperaba una cadena, numero u otra variable \n";
+            error=true;
             while(tokens[i]!=";"){
               if(i<tokens.length)  
                 i++;
@@ -141,6 +143,7 @@ function declaracion(tokens, recursive){
           break;
         default:
           mensaje+="ERROR SINTACTICO: Se esperaba un ; o la asignación de un valor \n";
+          error=true;
           while(tokens[i]!=";"){
             if(i<tokens.length)  
               i++;
@@ -150,6 +153,7 @@ function declaracion(tokens, recursive){
       }
     }else{
       mensaje+="ERROR SINTACTICO: Se esperaba el tipo de la variable declarada \n";
+      error=true;
       while(tokens[i]!=";"){
         if(i<tokens.length)  
           i++;
@@ -158,7 +162,8 @@ function declaracion(tokens, recursive){
       }
     }
   }else{
-    mensaje+="ERROR SINTACTICO: Se esperaba un identificador para la variable \n"
+    mensaje+="ERROR SINTACTICO: Se esperaba un identificador para la variable \n";
+    error=true;
     while(tokens[i]!=";"){
       if(i<tokens.length)  
         i++;
@@ -205,6 +210,60 @@ function elsetok(tokens, recursive){
     recursive=true;
   }
 }
+function identificador(tokens, recursive){
+  mensaje+="Actualizacion de variable\n";
+  var actual=tokens[++i];
+  if(actual=="="){
+    actual=tokens[++i];
+    if(actual=="num" || actual == "tokcadena" || actual == "identificador"){
+      actual=tokens[++i];
+      if(actual==";"){
+        mensaje+="Actualizacion de variable correcta sintacticamente \n";
+      }else{
+        mensaje+="ERROR SINTACTICO: Se esperaba un ; \n";
+        error=true;
+        while(tokens[i]!=";"){
+          if(i<tokens.length)  
+            i++;
+          else
+            recursive=false;  
+        }
+      }
+    }else{
+      mensaje+="ERROR SINTACTICO: Se esperaba un numero, cadena u otra variable \n";
+        error=true;
+        while(tokens[i]!=";"){
+          if(i<tokens.length)  
+            i++;
+          else
+            recursive=false;  
+        }
+    }
+  }else if(actual=="++" || actual=="--"){
+    actual=tokens[++i];
+    if(actual==";"){
+      mensaje+="Actualizacion de variable correcta sintacticamente \n";
+    }else{
+      mensaje+="ERROR SINTACTICO: Se esperaba un ; \n";
+      error=true;
+      while(tokens[i]!=";"){
+        if(i<tokens.length)  
+          i++;
+        else
+          recursive=false;  
+      }
+    }
+  }else{//AQUI IRIAN LAS FUNCIONES +=, -= Y *= EN UN ELSE IF
+    mensaje+="ERROR SINTACTICO: Se esperaba un operador \n";
+    error=true;
+    while(tokens[i]!=";"){
+      if(i<tokens.length)  
+        i++;
+      else
+        recursive=false;  
+    }
+  }
+}
 function sintactico(tokens, recursive){
   var actual=tokens[i];
   switch(actual){
@@ -223,11 +282,13 @@ function sintactico(tokens, recursive){
       case "elseTok":
           elsetok(tokens, recursive);
           break;
+      //case "identificador":
+       //   identificador(tokens, recursive);
+         // break;
       //default:
         //mensaje+=actual+"Operacion no definida\n";
   }
   if (recursive && i < tokens.length) {
-    
     sintactico(tokens, recursive);
   }
 }
