@@ -81,9 +81,7 @@ module.exports = function generador(codigo) {
         var numVar = tablaV.indexOf(aux[index].lexema);
         tablaP.push("CAR " + (numVar + 1));
         if (aux[index + 1].token == "=") {
-          if (aux[index + 2].token == "num") {
-            tablaP.push("LIT " + aux[index + 2].lexema);
-          }
+          tablaP.push("LIT " + aux[index + 2].lexema);
           tablaP.push("SET " + (numVar + 1));
           index += 2;
         }

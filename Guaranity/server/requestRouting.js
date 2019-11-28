@@ -2,7 +2,6 @@ var express = require("express");
 var Router = express.Router();
 var lexicografico = require("./lexicografico");
 var arreglos = require("./arreglos");
-var intermedio = require("./generador");
 //var sintactico= require("./sintactico");
 var mensaje = "",
   error = false,
@@ -193,6 +192,17 @@ function iftok(tokens, recursive) {
   if (i < tokens.length) {
     recursive = true;
   }
+  sintactico(tokens, recursive);
+}
+function elseiftok(tokens, recursive) {
+  mensaje += "Bloque ElseIf: \n";
+  condicion(tokens, recursive);
+  contenido(tokens, recursive);
+  mensaje += "Fin Bloque ElseIf:\n";
+  if (i < tokens.length) {
+    recursive = true;
+  }
+  sintactico(tokens, recursive);
 }
 function whiletok(tokens, recursive) {
   mensaje += "Bloque While:\n";
@@ -202,6 +212,7 @@ function whiletok(tokens, recursive) {
   if (i < tokens.length) {
     recursive = true;
   }
+  sintactico(tokens, recursive);
 }
 function vartok(tokens, recursive) {
   mensaje += "Declaración de variable \n";
@@ -222,56 +233,126 @@ function elsetok(tokens, recursive) {
     recursive = true;
   }
 }
-function identificador(tokens, recursive) {
-  mensaje += "Actualizacion de variable\n";
+
+function asignacion(tokens, recursive) {
   var actual = tokens[++i];
-  if (actual == "=") {
+  if (actual == "identificador" || actual == "tokcadena" || actual == "num") {
     actual = tokens[++i];
-    if (actual == "num" || actual == "tokcadena" || actual == "identificador") {
-      actual = tokens[++i];
-      if (actual == ";") {
-        mensaje += "Actualizacion de variable correcta sintacticamente \n";
-      } else {
-        mensaje += "ERROR SINTACTICO: Se esperaba un ; \n";
+    switch (actual) {
+      case "+":
+      case "-":
+      case "*":
+      case "/":
+        actual = tokens[++i];
+        if (
+          actual == "identificador" ||
+          actual == "tokcadena" ||
+          actual == "num"
+        ) {
+          actual = tokens[++i];
+          if (actual == ";") {
+            mensaje += "Asignacion correcta \n";
+          } else {
+            mensajes += "ERROR SINTACTICO: Se esperaba un ; \n";
+            error = true;
+            while (tokens[i] != ";") {
+              if (i < tokens.length) i++;
+              else {
+                recursive = false;
+                break;
+              }
+            }
+          }
+        } else {
+          mensajes +=
+            "ERROR SINTACTICO: Se esperaba una variable o un valor \n";
+          error = true;
+          while (tokens[i] != ";") {
+            if (i < tokens.length) i++;
+            else {
+              recursive = false;
+              break;
+            }
+          }
+        }
+        break;
+      case "++":
+      case "--":
+        actual = tokens[++i];
+        if (actual == ";") {
+          mensaje += "Asignacion correcta \n";
+        } else {
+          mensaje += "ERROR SINTACTICO: Se esperaba un ; \n";
+          error = true;
+          while (tokens[i] != ";") {
+            if (i < tokens.length) i++;
+            else {
+              recursive = false;
+              break;
+            }
+          }
+        }
+        break;
+      case ";":
+        mensaje += "Asignacion correcta\n";
+        break;
+      default:
+        mensaje += "ERROR SINTACTICO: Se esperaba un operador o un valor \n";
         error = true;
         while (tokens[i] != ";") {
           if (i < tokens.length) i++;
-          else recursive = false;
+          else {
+            recursive = false;
+            break;
+          }
         }
-      }
-    } else {
-      mensaje +=
-        "ERROR SINTACTICO: Se esperaba un numero, cadena u otra variable \n";
-      error = true;
-      while (tokens[i] != ";") {
-        if (i < tokens.length) i++;
-        else recursive = false;
-      }
-    }
-  } else if (actual == "++" || actual == "--") {
-    actual = tokens[++i];
-    if (actual == ";") {
-      mensaje += "Actualizacion de variable correcta sintacticamente \n";
-    } else {
-      mensaje += "ERROR SINTACTICO: Se esperaba un ; \n";
-      error = true;
-      while (tokens[i] != ";") {
-        if (i < tokens.length) i++;
-        else recursive = false;
-      }
-    }
-  } else {
-    //AQUI IRIAN LAS FUNCIONES +=, -= Y *= EN UN ELSE IF
-    mensaje += "ERROR SINTACTICO: Se esperaba un operador \n";
-    error = true;
-    while (tokens[i] != ";") {
-      if (i < tokens.length) i++;
-      else recursive = false;
     }
   }
 }
+
+function identificador2(tokens, recursive) {
+  mensaje += "Actualizacion de variable \n";
+  var actual = tokens[++i];
+  if (actual == "=") asignacion(tokens, recursive);
+  else if (actual == "++" || actual == "--") {
+    actual = tokens[++i];
+    if (actual == ";") {
+      mensaje += "Asignacion correcta \n";
+    } else {
+      mensaje += "ERROR SINTACTICO: se esperaba un ; \n";
+      error = true;
+      while (tokens[i] != ";") {
+        if (i < tokens.length) i++;
+        else {
+          recursive = false;
+          break;
+        }
+      }
+    }
+  } else {
+    mensaje +=
+      "ERROR SINTACTICO: se esperaba un = o un operador de asignacion \n";
+    error = true;
+    while (tokens[i] != ";") {
+      if (i < tokens.length) i++;
+      else {
+        recursive = false;
+        break;
+      }
+    }
+  }
+  mensaje += "Fin de actualizacion de variable \n";
+  if (i < tokens.length) {
+    recursive = true;
+    i++;
+  } else recursive = false;
+  sintactico(tokens, recursive);
+}
+
 function sintactico(tokens, recursive) {
   var actual = tokens[i];
+  // console.log(actual+"\n");
+
   switch (actual) {
     case "}":
       recursive = false;
@@ -288,9 +369,12 @@ function sintactico(tokens, recursive) {
     case "elseTok":
       elsetok(tokens, recursive);
       break;
-    //case "identificador":
-    //   identificador(tokens, recursive);
-    // break;
+    case "identificador":
+      identificador2(tokens, recursive);
+      break;
+    case "elseifTok":
+      elseiftok(tokens, recursive);
+      break;
     //default:
     //mensaje+=actual+"Operacion no definida\n";
   }
@@ -321,12 +405,6 @@ Router.post("/semantico", function(req, res) {
   var code = req.bodyparser.code;
   //var errores= semantico(code);
   //res.send(errores);
-});
-
-Router.post("/inter", function(req, res) {
-  var query1 = req.body.var1;
-  var code = intermedio(query1);
-  res.send(code);
 });
 
 Router.all("*", function(req, res) {

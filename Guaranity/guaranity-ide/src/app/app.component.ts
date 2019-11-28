@@ -20,6 +20,7 @@ export class AppComponent {
   title = "guaranity-ide";
   public codigoFull: string = "";
   public code: string = "";
+  public codigoP: string = "";
 
   public tabla = [];
   todo = [
@@ -152,10 +153,12 @@ export class AppComponent {
 
   callLexicografico() {
     axios
-      .post("http://server-test:5000/lexi", {
+      .post("http://167.71.113.211:5000/lexi", {
         var1: this.codigoFull
       })
       .then(res => {
+        this.clearTable();
+        this.createTable2();
         this.tabla = res.data;
         this.createTable();
         this.ToksTable = [];
@@ -170,7 +173,7 @@ export class AppComponent {
   }
   callSintactico() {
     axios
-      .post("http://server-test:5000/sintactico", {
+      .post("http://167.71.113.211:5000/sintactico", {
         tokens: this.ToksTable
       })
       .then(res => {
@@ -184,12 +187,14 @@ export class AppComponent {
 
   callIntermedio() {
     axios
-      .post("http://server-test:5000/inter", {
+      .post("http://167.71.113.211:5000/inter", {
         var1: this.tabla
       })
       .then(res => {
         console.log("Codigo p");
         console.log(res.data);
+        this.codigoP = res.data;
+        this.createTable2();
       })
       .catch(error => {
         console.error(error);
@@ -200,6 +205,24 @@ export class AppComponent {
     this.done = [];
     this.codigoFull = "";
     this.clearTable();
+  }
+
+  createTable2() {
+    this.clearTable2();
+    var col2 = document.createElement("tr");
+    var row3 = document.createElement("th");
+    var textrow3 = document.createTextNode("Código P");
+    row3.appendChild(textrow3);
+    col2.appendChild(row3);
+
+    for (var i = 0; i < this.codigoP.length; i++) {
+      var col2 = document.createElement("tr");
+      var row3 = document.createElement("td");
+      var textrow1 = document.createTextNode(this.codigoP[i]);
+      row3.appendChild(textrow1);
+      col2.appendChild(row3);
+      document.getElementById("tabla2").appendChild(col2);
+    }
   }
 
   createTable() {
@@ -231,8 +254,15 @@ export class AppComponent {
 
   clearTable() {
     var list = document.getElementById("tabla1");
-
     // As long as <ul> has a child node, remove it
+    while (list.hasChildNodes()) {
+      list.removeChild(list.firstChild);
+    }
+  }
+
+  clearTable2() {
+    var list = document.getElementById("tabla2");
+
     while (list.hasChildNodes()) {
       list.removeChild(list.firstChild);
     }
