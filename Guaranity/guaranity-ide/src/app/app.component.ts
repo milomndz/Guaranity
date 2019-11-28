@@ -152,7 +152,7 @@ export class AppComponent {
 
   callLexicografico() {
     axios
-      .post("http://server-test:5000/lexi", {
+      .post("http://localhost:5000/lexi", {
         var1: this.codigoFull
       })
       .then(res => {
@@ -170,7 +170,7 @@ export class AppComponent {
   }
   callSintactico() {
     axios
-      .post("http://server-test:5000/sintactico", {
+      .post("http://localhost:5000/sintactico", {
         tokens: this.ToksTable
       })
       .then(res => {
@@ -184,7 +184,7 @@ export class AppComponent {
 
   callIntermedio() {
     axios
-      .post("http://server-test:5000/inter", {
+      .post("http://localhost:5000/inter", {
         var1: this.tabla
       })
       .then(res => {
