@@ -12,20 +12,29 @@ module.exports = function generador(codigo) {
 
     switch (element) {
       case "ifTok":
-        switch (aux[index + 1].token) {
+        switch (aux[index + 2].token) {
           case "identificador":
-            var numVar = tablaV.indexOf(aux[index + 1].lexema);
+            var numVar = tablaV.indexOf(aux[index + 2].lexema);
             var caracterVar = arreglos.comparativos.indexOf(
-              aux[index + 2].lexema
+              aux[index + 3].lexema
             );
-            tablaP.push("CAR " + numVar);
-            if (aux[index + 3].token == "num") {
-              tablaP.push("LIT " + aux[index + 2].lexema);
+            tablaP.push("CAR " + (numVar + 1));
+            if (aux[index + 4].token == "num") {
+              tablaP.push("LIT " + aux[index + 4].lexema);
               tablaP.push("OPR 1" + caracterVar);
               tablaP.push("SAC ");
             }
+            if (aux[index + 4].token == "identificador") {
+              var numVar2 = tablaV.indexOf(aux[index + 4].lexema);
+              tablaP.push("CAR " + (numVar2 + 1));
+              tablaP.push("OPR 1" + caracterVar);
+              tablaP.push("SAC ");
+            }
+            index += 4;
             break;
           case "num":
+            tablaP.push("LIT " + aux[index].lexema);
+            break;
         }
         break;
       case "forTok":

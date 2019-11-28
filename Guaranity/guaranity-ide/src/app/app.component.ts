@@ -140,8 +140,7 @@ export class AppComponent {
     }
     if (flag) {
       this.callLexicografico();
-     
-    }else {
+    } else {
       this.saveFile();
     }
   }
@@ -165,11 +164,11 @@ export class AppComponent {
       .then(res => {
         this.tabla = res.data;
         this.createTable();
-        this.ToksTable=[];
-      for(var i =0; i< this.tabla.length; i++){
-        this.ToksTable.push(this.tabla[i].token)
-      }
-      this.callSintactico();
+        this.ToksTable = [];
+        for (var i = 0; i < this.tabla.length; i++) {
+          this.ToksTable.push(this.tabla[i].token);
+        }
+        this.callSintactico();
       })
       .catch(error => {
         console.error(error);
@@ -182,7 +181,21 @@ export class AppComponent {
       })
       .then(res => {
         alert(res.data);
-        //this.createTable();
+        this.callIntermedio();
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }
+
+  callIntermedio() {
+    axios
+      .post("http://localhost:5000/inter", {
+        var1: this.tabla
+      })
+      .then(res => {
+        console.log("Codigo p");
+        console.log(res.data);
       })
       .catch(error => {
         console.error(error);
