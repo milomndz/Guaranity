@@ -1,8 +1,7 @@
 var express = require("express");
 var Router = express.Router();
 var lexicografico = require("./lexicografico");
-var arreglos = require("./arreglos");
-var intermedio = require("./generador");
+var arreglos= require("./arreglos");
 //var sintactico= require("./sintactico");
 var mensaje="", error=false, variables=[];
 var i=0;
@@ -60,6 +59,15 @@ function condicion(tokens,recursive){
                     recursive=false;
                 }
             }
+          }else {
+                error=true;
+                mensaje+='ERROR SINTACTICO en condición: Se  esperaba un "(" \n';
+                while(tokens[i]!="{"){
+                  if(i<tokens.length)  
+                    i++;
+                  else
+                    recursive=false;
+                }
           }
 }
 function contenido(tokens, recursive){
@@ -84,32 +92,16 @@ function contenido(tokens, recursive){
                 recursive=false;
             }
         }
-      } else {
-        error = true;
-        mensaje +=
-          "ERROR SINTACTICO en condición: Se  esperaba un comparador \n";
-        while (tokens[i] != "{") {
-          if (i < tokens.length) i++;
-          else recursive = false;
+    }else {
+        error=true;
+        mensaje+='ERROR SINTACTICO en contenido: Se  esperaba una "{" \n';
+        while(tokens[i]!=";" && tokens[i]!="}" && tokens[i]!="{"){
+          if(i<tokens.length)  
+            i++;
+          else
+            recursive=false;
         }
-      }
-    } else {
-      error = true;
-      mensaje +=
-        "ERROR SINTACTICO en condición: Se  esperaba un identificador, número, cadena o booleano \n";
-      while (tokens[i] != "{") {
-        if (i < tokens.length) i++;
-        else recursive = false;
-      }
     }
-  } else {
-    error = true;
-    mensaje += 'ERROR SINTACTICO en condición: Se  esperaba un "(" \n';
-    while (tokens[i] != "{") {
-      if (i < tokens.length) i++;
-      else recursive = false;
-    }
-  }
 }
 function declaracion(tokens, recursive){
   var actual=tokens[++i];
@@ -307,12 +299,6 @@ Router.post("/lexi", function(req, res) {
   res.send(code);
 });
 
-Router.post("/inter", function(req, res) {
-  var query1 = req.body.var1;
-  var code = intermedio(query1);
-  res.send(code);
-});
-
 Router.post("/all", function(req, res) {
   res.send("sirvo");
   var codigo = req.bodyparser.codigo;
@@ -326,15 +312,19 @@ sintactico(tokens,false);
 res.send(mensaje);
 
 });
-Router.post("/semantico", function(req, res) {
-  var code = req.bodyparser.code;
+Router.post("/semantico", function(req,res){
+  var code=req.bodyparser.code;
   //var errores= semantico(code);
   //res.send(errores);
-});
+  });
 
 Router.all("*", function(req, res) {
   res.send("No se encontro el recurso solicitado");
   res.end();
 });
+
+
+
+
 
 module.exports = Router;

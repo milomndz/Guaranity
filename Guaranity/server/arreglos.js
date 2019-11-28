@@ -24,10 +24,12 @@ module.exports = {
     "return"
   ],
 
-  cadenas: ['"'],
-  comentario: ["#"],
-  comparativos: ["<", ">", "==", "<=", ">=", "!="],
-  operaciones: ["+", "-", "*", "/", "%", "++", "--", "="],
+  cadenas:[
+    "\""
+  ],
+  comentario:[
+    "#"
+  ],
   alfabeto: [
     "a",
     "b",
@@ -80,7 +82,7 @@ module.exports = {
     "[",
     "]",
     "(",
-    ")"
+    ")",
   ],
   tokens: [
     "ifTok",
@@ -106,5 +108,12 @@ module.exports = {
     "printTok",
     "returnTok"
   ],
-  comparadores: ["<", ">", ">='", ">=", "==", "!="]
+  comparadores : [
+    "<",
+    ">", 
+    ">='", 
+    ">=", 
+    "==", 
+    "!="
+  ]
 };
