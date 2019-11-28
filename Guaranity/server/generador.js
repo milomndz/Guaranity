@@ -53,7 +53,8 @@ module.exports = function generador(codigo) {
         }
         break;
       case "forTok":
-        tablaP.push("codigo p de for");
+        switch (aux[index + 2].token) {
+        }
         break;
       case "elseTok":
         tablaP.push("codigo p de else");
@@ -80,16 +81,48 @@ module.exports = function generador(codigo) {
         var numVar = tablaV.indexOf(aux[index].lexema);
         tablaP.push("CAR " + (numVar + 1));
         if (aux[index + 1].token == "=") {
-          tablaP.push("LIT " + aux[index + 2].lexema);
-          tablaP.push("SET " + (numVar + 1));
-          index += 2;
-        }
-        if (arreglos.operaciones.indexOf(aux[index + 1].token)) {
           if (aux[index + 2].token == "num") {
             tablaP.push("LIT " + aux[index + 2].lexema);
           }
-
           tablaP.push("SET " + (numVar + 1));
+          index += 2;
+        }
+        if (aux[index + 1].token == "--" || aux[index + 1].token == "++") {
+          tablaP.push("LIT " + 1);
+          switch (aux[index + 1].token) {
+            case "--":
+              tablaP.push("OPR " + 2);
+              break;
+            case "++":
+              tablaP.push("OPR " + 1);
+              break;
+          }
+        }
+        if (arreglos.operaciones.indexOf(aux[index + 1].token) != -1) {
+          if (aux[index + 2].token == "num") {
+            tablaP.push("LIT " + aux[index + 2].lexema);
+          }
+          if (aux[index + 2].token == "identificador") {
+            var numVar2 = tablaV.indexOf(aux[index + 2].lexema);
+            tablaP.push("CAR " + (numVar2 + 1));
+          }
+          switch (aux[index + 1].token) {
+            case "+":
+              tablaP.push("OPR " + 1);
+              break;
+            case "-":
+              tablaP.push("OPR " + 2);
+              break;
+            case "*":
+              tablaP.push("OPR " + 3);
+              break;
+            case "/":
+              tablaP.push("OPR " + 4);
+              break;
+            case "%":
+              tablaP.push("OPR " + 5);
+              break;
+          }
           index += 2;
         }
         break;

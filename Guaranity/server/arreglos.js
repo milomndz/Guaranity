@@ -27,7 +27,7 @@ module.exports = {
   cadenas: ['"'],
   comentario: ["#"],
   comparativos: ["<", ">", "<=", ">=", "==", "!="],
-  operaciones: ["+", "-", "*", "/", "%", "++", "--", "="],
+  operaciones: ["+", "-", "*", "/", "%"],
   alfabeto: [
     "a",
     "b",
