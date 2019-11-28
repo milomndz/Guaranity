@@ -254,7 +254,7 @@ function asignacion(tokens, recursive) {
           if (actual == ";") {
             mensaje += "Asignacion correcta \n";
           } else {
-            mensajes += "ERROR SINTACTICO: Se esperaba un ; \n";
+            mensaje += "ERROR SINTACTICO: Se esperaba un ; \n";
             error = true;
             while (tokens[i] != ";") {
               if (i < tokens.length) i++;
@@ -265,8 +265,7 @@ function asignacion(tokens, recursive) {
             }
           }
         } else {
-          mensajes +=
-            "ERROR SINTACTICO: Se esperaba una variable o un valor \n";
+          mensaje += "ERROR SINTACTICO: Se esperaba una variable o un valor \n";
           error = true;
           while (tokens[i] != ";") {
             if (i < tokens.length) i++;
