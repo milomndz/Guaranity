@@ -2,6 +2,7 @@ var express = require("express");
 var Router = express.Router();
 var lexicografico = require("./lexicografico");
 var arreglos = require("./arreglos");
+var intermedio = require("./generador");
 //var sintactico= require("./sintactico");
 var mensaje = "",
   error = false,
@@ -405,6 +406,12 @@ Router.post("/semantico", function(req, res) {
   var code = req.bodyparser.code;
   //var errores= semantico(code);
   //res.send(errores);
+});
+
+Router.post("/inter", function(req, res) {
+  var query1 = req.body.var1;
+  var code = intermedio(query1);
+  res.send(code);
 });
 
 Router.all("*", function(req, res) {
