@@ -43,12 +43,6 @@ export class AppComponent {
       condition: true
     },
     {
-      title: "elseif",
-      class: "elseif",
-      disabled: false,
-      condition: true
-    },
-    {
       title: "else",
       class: "else",
       disabled: false,
@@ -158,7 +152,7 @@ export class AppComponent {
 
   callLexicografico() {
     axios
-      .post("http://localhost:5000/lexi", {
+      .post("http://server-test:5000/lexi", {
         var1: this.codigoFull
       })
       .then(res => {
@@ -168,7 +162,7 @@ export class AppComponent {
         for (var i = 0; i < this.tabla.length; i++) {
           this.ToksTable.push(this.tabla[i].token);
         }
-        this.callSintactico();
+        this.callIntermedio();
       })
       .catch(error => {
         console.error(error);
@@ -176,7 +170,7 @@ export class AppComponent {
   }
   callSintactico() {
     axios
-      .post("http://localhost:5000/sintactico", {
+      .post("http://server-test:5000/sintactico", {
         tokens: this.ToksTable
       })
       .then(res => {
@@ -190,7 +184,7 @@ export class AppComponent {
 
   callIntermedio() {
     axios
-      .post("http://localhost:5000/inter", {
+      .post("http://server-test:5000/inter", {
         var1: this.tabla
       })
       .then(res => {
